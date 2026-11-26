@@ -6,6 +6,7 @@ import itson.battleship.enums.EstadoJugador;
 /**
  *
  * @author Jesús Rodrigo Villegas Argüelles - 261186
+ *          Kevin Adrian Mendoza Moreno - 215752
  */
 public class Jugador {
 

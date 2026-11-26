@@ -8,6 +8,7 @@ import itson.battleship.observer.Observado;
 import itson.battleship.observer.Observador;
 import java.util.ArrayList;
 import java.util.List;
+import itson.battleship.enums.ResultadoColocacion;
 
 /**
  *
@@ -189,5 +190,28 @@ public class Partida implements IPartida, IModel, Observado {
     public boolean esCoordenadaDentroDelTablero(Coordenadas coord) {
         Jugador oponente = obtenerOponente(turno.obtenerJugadorEnTurno());
         return oponente.getTablero().validarCoordenada(coord);
+    }
+    
+    // colocar naves 
+    @Override
+    public ResultadoColocacion colocarNave(Jugador jugador, Nave nave, Coordenadas coord) {
+        ResultadoColocacion resultado = jugador.getTablero().colocarNave(nave, coord);
+        if (resultado == ResultadoColocacion.COLOCADA) {
+            notificarObservadores();
+        }
+        return resultado;
+    }
+
+    @Override
+    public void limpiarTablero(Jugador jugador) {
+        jugador.getTablero().limpiar();
+        notificarObservadores();
+    }
+
+    @Override
+    public void confirmarTablero(Jugador jugador) {
+        if (jugador.confirmarTablero()) {
+            notificarObservadores();
+        }
     }
 }
