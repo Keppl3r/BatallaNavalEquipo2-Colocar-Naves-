@@ -3,6 +3,7 @@ package itson.battleship.model;
 import itson.battleship.enums.ResultadoDisparo;
 import itson.battleship.enums.EstadoPartida;
 import itson.battleship.enums.EstadoNave;
+import itson.battleship.enums.EstadoJugador;
 
 /**
  *
@@ -29,4 +30,14 @@ public interface IModel {
     boolean hayTiempoAgotado();
 
     boolean esCoordenadaDentroDelTablero(Coordenadas coord);
+    
+    int obtenerNavesPendientes(Jugador jugador, String tipo);
+
+    boolean estaFlotaCompleta(Jugador jugador);
+
+    boolean hayNaveEn(Jugador jugador, Coordenadas coord);
+
+    boolean ambosConfirmaron();
+
+    EstadoJugador obtenerEstadoJugador(Jugador jugador);
 }

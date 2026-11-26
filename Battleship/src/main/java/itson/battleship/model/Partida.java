@@ -214,4 +214,30 @@ public class Partida implements IPartida, IModel, Observado {
             notificarObservadores();
         }
     }
+    
+      @Override
+    public int obtenerNavesPendientes(Jugador jugador, String tipo) {
+        return jugador.getTablero().contarNavesPendientes(tipo);
+    }
+
+    @Override
+    public boolean estaFlotaCompleta(Jugador jugador) {
+        return jugador.getTablero().estaFlotaCompleta();
+    }
+
+    @Override
+    public boolean hayNaveEn(Jugador jugador, Coordenadas coord) {
+        return jugador.getTablero().getCasilla(coord).tieneNave();
+    }
+
+    @Override
+    public boolean ambosConfirmaron() {
+        return jugador1.getEstado() == EstadoJugador.LISTO
+                && jugador2.getEstado() == EstadoJugador.LISTO;
+    }
+
+    @Override
+    public EstadoJugador obtenerEstadoJugador(Jugador jugador) {
+        return jugador.getEstado();
+    }
 }
