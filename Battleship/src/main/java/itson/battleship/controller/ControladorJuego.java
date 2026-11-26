@@ -22,10 +22,6 @@ public class ControladorJuego implements IControlador {
     private IPartida partida;
     private ProxyPeer proxyPeer;
 
-    public ControladorJuego(IPartida partida) {
-        this.partida = partida;
-    }
-
     public ControladorJuego(IPartida partida, ProxyPeer proxyPeer) {
         this.partida = partida;
         this.proxyPeer = proxyPeer;
