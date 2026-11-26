@@ -1,6 +1,9 @@
 package itson.battleship.controller;
 
+import itson.battleship.enums.OrientacionNave;
+import itson.battleship.enums.ResultadoColocacion;
 import itson.battleship.model.Coordenadas;
+import itson.battleship.model.Jugador;
 
 /**
  *
@@ -9,4 +12,11 @@ import itson.battleship.model.Coordenadas;
 public interface IControlador {
 
     void seleccionarDisparo(Coordenadas coord);
+    
+    ResultadoColocacion colocarNave(Jugador jugador, String tipo, OrientacionNave orientacion, Coordenadas coord);
+
+    void limpiarTablero(Jugador jugador);
+
+    void confirmarTablero(Jugador jugador);
+    
 }

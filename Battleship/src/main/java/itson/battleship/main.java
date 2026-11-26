@@ -15,10 +15,12 @@ import itson.battleship.model.Submarino;
 import itson.battleship.model.Tablero;
 import itson.battleship.view.PantallaPrincipal;
 import java.util.Scanner;
+import itson.battleship.red.ProxyPeer;
 
 /**
  *
  * @author Jesús Rodrigo Villegas Argüelles - 261186
+ *          Kevin Adrian Mendoza Moreno - 215752
  */
 public class main {
 
@@ -29,7 +31,8 @@ public class main {
         jugador2.confirmarTablero();
 
         Partida partida = new Partida("Batalla Naval", jugador1, jugador2, 30);
-        IControlador controlador = new ControladorJuego(partida);
+        ProxyPeer proxyPeer = new ProxyPeer();
+        IControlador controlador = new ControladorJuego(partida, proxyPeer);
         Scanner scanner = new Scanner(System.in);
 
         partida.iniciar();
