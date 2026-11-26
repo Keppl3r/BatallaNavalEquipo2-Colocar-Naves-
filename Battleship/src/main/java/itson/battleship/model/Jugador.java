@@ -26,8 +26,12 @@ public class Jugador {
         this.color = color;
     }
 
-    public void confirmarTablero() {
+   public boolean confirmarTablero() {
+        if (!tablero.confirmar()) {
+            return false;
+        }
         estado = EstadoJugador.LISTO;
+        return true;
     }
 
     public void abandonar() {
