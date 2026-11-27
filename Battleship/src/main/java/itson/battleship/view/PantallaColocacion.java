@@ -6,6 +6,9 @@ package itson.battleship.view;
 
 import itson.battleship.controller.IControlador;
 import itson.battleship.enums.EstadoJugador;
+import itson.battleship.enums.OrientacionNave;
+import itson.battleship.enums.ResultadoColocacion;
+import itson.battleship.model.Coordenadas;
 import itson.battleship.model.IModel;
 import itson.battleship.model.Jugador;
 import itson.battleship.observer.Observador;
@@ -31,6 +34,11 @@ public class PantallaColocacion implements Observador {
         this.jugador = jugador;
         this.scanner = scanner;
         this.activa = false;
+    }
+    
+    public void soltarNave(String tipo, OrientacionNave orientacion, Coordenadas coord) {
+        ResultadoColocacion resultado = controlador.colocarNave(jugador, tipo, orientacion, coord);
+        mostrarResultado(resultado, tipo);
     }
 
     @Override
@@ -71,6 +79,23 @@ public class PantallaColocacion implements Observador {
             mostrarMensaje("Todas las naves colocadas correctamente. Confirma tu tablero");
         } else {
             mostrarMensaje("Pendientes: " + describirFaltantes());
+        }
+    }
+    
+     private void mostrarResultado(ResultadoColocacion resultado, String tipo) {
+        switch (resultado) {
+            case FUERA_DEL_TABLERO:
+                mostrarMensaje("La nave no cabe en esa posicion");
+                break;
+            case NAVE_CERCA:
+                mostrarMensaje("Posicion invalida: la nave no puede quedar pegada a otra");
+                break;
+            case TIPO_AGOTADO:
+                mostrarMensaje("Ya colocaste todos los " + tipo + " permitidos");
+                break;
+            case TABLERO_CONFIRMADO:
+                mostrarMensaje("Tu tablero ya esta confirmado");
+                break;
         }
     }
 
