@@ -35,7 +35,7 @@ public interface IModel {
 
     boolean estaFlotaCompleta(Jugador jugador);
 
-    boolean hayNaveEn(Jugador jugador, Coordenadas coord);
+    boolean[][] obtenerCasillasOcupadas(Jugador jugador);
 
     boolean ambosConfirmaron();
 

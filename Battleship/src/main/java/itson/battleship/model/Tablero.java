@@ -128,6 +128,16 @@ public class Tablero {
         confirmado = true;
         return true;
     }
+    
+        public boolean[][] obtenerCasillasOcupadas() {
+        boolean[][] ocupadas = new boolean[filas][columnas];
+        for (int y = 0; y < filas; y++) {
+            for (int x = 0; x < columnas; x++) {
+                ocupadas[y][x] = casillas[y][x].tieneNave();
+            }
+        }
+        return ocupadas;
+    }
 
     private boolean hayNaveCerca(Coordenadas coord) {
         for (int dy = -1; dy <= 1; dy++) {

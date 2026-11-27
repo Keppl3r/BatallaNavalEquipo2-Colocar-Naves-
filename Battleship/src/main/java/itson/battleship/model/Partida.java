@@ -227,8 +227,8 @@ public class Partida implements IPartida, IModel, Observado {
     }
 
     @Override
-    public boolean hayNaveEn(Jugador jugador, Coordenadas coord) {
-        return jugador.getTablero().getCasilla(coord).tieneNave();
+    public boolean[][] obtenerCasillasOcupadas(Jugador jugador) {
+        return jugador.getTablero().obtenerCasillasOcupadas();
     }
 
     @Override
