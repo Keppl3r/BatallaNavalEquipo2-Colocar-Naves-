@@ -9,12 +9,12 @@ import itson.battleship.model.Jugador;
 /**
  *
  * @author Kevin Adrian Mendoza Moreno - 215752 
- * Está clase es una simulación de la conexión local
+ * Esta clase es una simulación de la conexión local
  */
 public class ProxyPeer {
     
     public void enviarConfirmacion(Jugador jugador) {
-        System.out.println("red" + jugador.getNombre() + " confirmo su tablero");
+        System.out.println("red simulacion" + jugador.getNombre() + " confirmo su tablero");
     }
     
 }
