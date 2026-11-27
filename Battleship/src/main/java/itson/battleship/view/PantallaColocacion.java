@@ -6,7 +6,6 @@ package itson.battleship.view;
 
 import itson.battleship.controller.IControlador;
 import itson.battleship.enums.EstadoJugador;
-import itson.battleship.model.Coordenadas;
 import itson.battleship.model.IModel;
 import itson.battleship.model.Jugador;
 import itson.battleship.observer.Observador;
