@@ -42,10 +42,10 @@ public class ControladorJuego implements IControlador {
         partida.limpiarTablero(jugador);
     }
 
-    @Override
-    public void confirmarTablero(Jugador jugador) {
-        partida.confirmarTablero(jugador);
-        proxyPeer.enviarConfirmacion(jugador);
+       public void confirmarTablero(Jugador jugador) {
+        if (partida.confirmarTablero(jugador)) {
+            proxyPeer.enviarConfirmacion(jugador);
+        }
     }
 
     private Nave crearNave(String tipo, OrientacionNave orientacion) {
