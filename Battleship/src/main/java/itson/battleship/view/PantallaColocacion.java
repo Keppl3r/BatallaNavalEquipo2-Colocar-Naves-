@@ -36,6 +36,36 @@ public class PantallaColocacion implements Observador {
         this.activa = false;
     }
     
+    
+    public void iniciar() {
+        activa = true;
+        mostrarMensaje("Coloca tus naves");
+        mostrarTablero();
+        while (modelo.obtenerEstadoJugador(jugador) != EstadoJugador.LISTO) {
+            String opcion = leer("1 = colocar nave, 2 = limpiar tablero, 3 = confirmar tablero");
+            if (opcion.equals("1")) {
+                String tipo = convertirTipo(leer("Nave: P = PortaAviones (4), C = Crucero (3), S = Submarino (2), B = Barco (1)"));
+                if (tipo == null) {
+                    mostrarMensaje("Nave no valida");
+                } else {
+                    Coordenadas coord = convertirCoordenadas(leer("Casilla donde empieza la nave (ej. A1)"));
+                    OrientacionNave orientacion = OrientacionNave.HORIZONTAL;
+                    if (leer("Orientacion: H = horizontal, V = vertical").equalsIgnoreCase("V")) {
+                        orientacion = OrientacionNave.VERTICAL;
+                    }
+                    soltarNave(tipo, orientacion, coord);
+                }
+            } else if (opcion.equals("2")) {
+                presionarLimpiar();
+            } else if (opcion.equals("3")) {
+                presionarConfirmar();
+            } else {
+                mostrarMensaje("Opcion no valida");
+            }
+        }
+        activa = false;
+    }
+    
     public void soltarNave(String tipo, OrientacionNave orientacion, Coordenadas coord) {
         ResultadoColocacion resultado = controlador.colocarNave(jugador, tipo, orientacion, coord);
         mostrarResultado(resultado, tipo);
@@ -129,6 +159,36 @@ public class PantallaColocacion implements Observador {
             }
         }
         return texto.trim();
+    }
+    
+    private String convertirTipo(String letra) {
+        switch (letra.toUpperCase()) {
+            case "P":
+                return "PortaAviones";
+            case "C":
+                return "Crucero";
+            case "S":
+                return "Submarino";
+            case "B":
+                return "Barco";
+            default:
+                return null;
+        }
+    }
+
+    private Coordenadas convertirCoordenadas(String texto) {
+        String limpio = texto.trim().toUpperCase();
+        if (limpio.length() < 2) {
+            return new Coordenadas(-1, -1);
+        }
+        int x = limpio.charAt(0) - 'A';
+        int y;
+        try {
+            y = Integer.parseInt(limpio.substring(1)) - 1;
+        } catch (NumberFormatException e) {
+            return new Coordenadas(-1, -1);
+        }
+        return new Coordenadas(x, y);
     }
     
     private String leer(String pregunta) {
