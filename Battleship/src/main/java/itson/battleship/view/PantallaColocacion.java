@@ -16,6 +16,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -24,6 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 
 /**
@@ -225,6 +230,77 @@ public class PantallaColocacion implements Observador {
 
     private void mostrarMensaje(String mensaje) {
         lblMensaje.setText(mensaje);
+    }
+    
+        private void seleccionarCasilla(int x, int y) {
+        if (tipoSeleccionado == null) {
+            mostrarMensaje("Primero elige una nave");
+            return;
+        }
+        soltarNave(tipoSeleccionado, orientacion, new Coordenadas(x, y));
+    }
+
+    private void girar() {
+        if (orientacion == OrientacionNave.HORIZONTAL) {
+            orientacion = OrientacionNave.VERTICAL;
+            lblOrientacion.setText("Orientación: vertical");
+        } else {
+            orientacion = OrientacionNave.HORIZONTAL;
+            lblOrientacion.setText("Orientación: horizontal");
+        }
+    }
+
+    // listeners
+    class CasillaListener implements ActionListener {
+
+        private int x;
+        private int y;
+
+        public CasillaListener(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        public void actionPerformed(ActionEvent event) {
+            seleccionarCasilla(x, y);
+        }
+    }
+
+    class GirarListener extends MouseAdapter {
+
+        public void mousePressed(MouseEvent event) {
+            if (SwingUtilities.isRightMouseButton(event)) {
+                girar();
+            }
+        }
+    }
+
+    class NaveListener implements ActionListener {
+
+        private String tipo;
+
+        public NaveListener(String tipo) {
+            this.tipo = tipo;
+        }
+
+        public void actionPerformed(ActionEvent event) {
+            tipoSeleccionado = tipo;
+            mostrarMensaje("Nave elegida: " + tipo);
+        }
+    }
+
+    class LimpiarListener implements ActionListener {
+
+        public void actionPerformed(ActionEvent event) {
+            presionarLimpiar();
+        }
+    }
+
+    class ConfirmarListener implements ActionListener {
+
+        public void actionPerformed(ActionEvent event) {
+            presionarConfirmar();
+        }
     }
 
     

@@ -35,7 +35,7 @@ public class main {
         partida.agregarObservador(colocacion2);
         colocacion1.iniciar();
         colocacion2.iniciar();
-
+        
         while (!partida.ambosConfirmaron()) {
             Thread.sleep(500);
         }
