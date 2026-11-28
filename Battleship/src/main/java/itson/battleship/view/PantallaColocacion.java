@@ -5,6 +5,7 @@
 package itson.battleship.view;
 
 import itson.battleship.controller.IControlador;
+import itson.battleship.enums.EstadoJugador;
 import itson.battleship.enums.OrientacionNave;
 import itson.battleship.enums.ResultadoColocacion;
 import itson.battleship.model.Coordenadas;
@@ -12,6 +13,7 @@ import itson.battleship.model.IModel;
 import itson.battleship.model.Jugador;
 import itson.battleship.observer.Observador;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
@@ -147,9 +149,82 @@ public class PantallaColocacion implements Observador {
         controlador.confirmarTablero(jugador);
     }
 
+        // observer
     @Override
     public void actualizarPantalla() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        boolean listo = modelo.obtenerEstadoJugador(jugador) == EstadoJugador.LISTO;
+        mostrarTablero();
+
+        if (!listo) {
+            return;
+        }
+
+        btnLimpiar.setEnabled(false);
+        btnConfirmar.setEnabled(false);
+        if (modelo.ambosConfirmaron()) {
+            mostrarMensaje("Ambos tableros confirmados. Continúa en Iniciar partida");
+        } else {
+            mostrarMensaje("Tablero confirmado. Esperando a que tu rival confirme el suyo...");
+        }
+    }
+
+    private void mostrarTablero() {
+        boolean[][] ocupadas = modelo.obtenerCasillasOcupadas(jugador);
+        for (int y = 0; y < ocupadas.length; y++) {
+            for (int x = 0; x < ocupadas[y].length; x++) {
+                if (ocupadas[y][x]) {
+                    casillas[y][x].setBackground(Color.DARK_GRAY);
+                } else {
+                    casillas[y][x].setBackground(new Color(173, 216, 230));
+                }
+            }
+        }
+
+        for (int i = 0; i < TIPOS.length; i++) {
+            int pendientes = modelo.obtenerNavesPendientes(jugador, TIPOS[i]);
+            botonesNave[i].setText(TIPOS[i] + " x" + pendientes);
+            botonesNave[i].setEnabled(pendientes > 0);
+        }
+
+        boolean completa = modelo.estaFlotaCompleta(jugador);
+        btnConfirmar.setEnabled(completa);
+        if (completa) {
+            mostrarMensaje("Todas las naves colocadas correctamente. Confirma tu tablero");
+        } else {
+            mostrarMensaje("Pendientes: " + describirFaltantes());
+        }
+    }
+
+    private void mostrarResultado(ResultadoColocacion resultado, String tipo) {
+        switch (resultado) {
+            case FUERA_DEL_TABLERO:
+                mostrarMensaje("La nave no cabe en esa posición");
+                break;
+            case NAVE_CERCA:
+                mostrarMensaje("Posición inválida: la nave no puede quedar pegada a otra");
+                break;
+            case TIPO_AGOTADO:
+                mostrarMensaje("Ya colocaste todos los " + tipo + " permitidos");
+                break;
+            case TABLERO_CONFIRMADO:
+                mostrarMensaje("Tu tablero ya está confirmado");
+                break;
+        }
+    }
+
+    private String describirFaltantes() {
+        String texto = "";
+        for (String tipo : TIPOS) {
+            int pendientes = modelo.obtenerNavesPendientes(jugador, tipo);
+            if (pendientes > 0) {
+                texto += pendientes + " " + tipo + " ";
+            }
+        }
+        return texto.trim();
+    }
+
+    private void mostrarMensaje(String mensaje) {
+        lblMensaje.setText(mensaje);
     }
 
     
