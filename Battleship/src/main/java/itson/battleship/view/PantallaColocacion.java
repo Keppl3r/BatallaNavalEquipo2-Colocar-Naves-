@@ -6,6 +6,8 @@ package itson.battleship.view;
 
 import itson.battleship.controller.IControlador;
 import itson.battleship.enums.OrientacionNave;
+import itson.battleship.enums.ResultadoColocacion;
+import itson.battleship.model.Coordenadas;
 import itson.battleship.model.IModel;
 import itson.battleship.model.Jugador;
 import itson.battleship.observer.Observador;
@@ -17,6 +19,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -114,6 +117,34 @@ public class PantallaColocacion implements Observador {
         frame.setSize(800, 560);
         frame.setLocationByPlatform(true);
         frame.setVisible(true);
+    }
+    
+    // eventos
+    public void soltarNave(String tipo, OrientacionNave orientacion, Coordenadas coord) {
+        ResultadoColocacion resultado = controlador.colocarNave(jugador, tipo, orientacion, coord);
+        mostrarResultado(resultado, tipo);
+    }
+
+    public void presionarLimpiar() {
+        controlador.limpiarTablero(jugador);
+    }
+
+    public void presionarConfirmar() {
+        if (!modelo.estaFlotaCompleta(jugador)) {
+            mostrarMensaje("Debes colocar todas las naves para confirmar. Faltan: " + describirFaltantes());
+            return;
+        }
+        int respuesta = JOptionPane.showConfirmDialog(frame, "Una vez confirmado, ya no podrás modificar tu tablero",
+                "Confirmar tablero", JOptionPane.YES_NO_OPTION);
+        if (respuesta == JOptionPane.YES_OPTION) {
+            aceptarConfirmacion();
+        } else {
+            mostrarMensaje("Confirmación cancelada");
+        }
+    }
+
+    public void aceptarConfirmacion() {
+        controlador.confirmarTablero(jugador);
     }
 
     @Override
