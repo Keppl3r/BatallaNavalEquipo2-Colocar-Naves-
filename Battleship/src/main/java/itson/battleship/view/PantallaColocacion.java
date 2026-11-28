@@ -40,6 +40,27 @@ public class PantallaColocacion implements Observador {
         ResultadoColocacion resultado = controlador.colocarNave(jugador, tipo, orientacion, coord);
         mostrarResultado(resultado, tipo);
     }
+    
+    public void presionarLimpiar() {
+        controlador.limpiarTablero(jugador);
+    }
+
+    public void presionarConfirmar() {
+        if (!modelo.estaFlotaCompleta(jugador)) {
+            mostrarMensaje("Debes colocar todas las naves para confirmar. Faltan: " + describirFaltantes());
+            return;
+        }
+        mostrarMensaje("Una vez confirmado, ya no podras modificar tu tablero");
+        if (leer("Confirmar? S/N").equalsIgnoreCase("S")) {
+            aceptarConfirmacion();
+        } else {
+            mostrarMensaje("Confirmacion cancelada");
+        }
+    }
+
+    public void aceptarConfirmacion() {
+        controlador.confirmarTablero(jugador);
+    }
 
     @Override
     public void actualizarPantalla() {
@@ -108,6 +129,14 @@ public class PantallaColocacion implements Observador {
             }
         }
         return texto.trim();
+    }
+    
+    private String leer(String pregunta) {
+        System.out.print("[" + jugador.getNombre() + "] " + pregunta + ": ");
+        if (!scanner.hasNextLine()) {
+            System.exit(0);
+        }
+        return scanner.nextLine().trim();
     }
 
     private void mostrarMensaje(String mensaje) {
