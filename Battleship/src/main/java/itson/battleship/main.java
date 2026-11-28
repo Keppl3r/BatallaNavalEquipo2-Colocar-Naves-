@@ -2,20 +2,15 @@ package itson.battleship;
 
 import itson.battleship.controller.ControladorJuego;
 import itson.battleship.controller.IControlador;
-import itson.battleship.model.Barco;
 import itson.battleship.enums.ColorJugador;
-import itson.battleship.model.Coordenadas;
-import itson.battleship.model.Crucero;
 import itson.battleship.enums.EstadoPartida;
 import itson.battleship.model.Jugador;
-import itson.battleship.enums.OrientacionNave;
 import itson.battleship.model.Partida;
-import itson.battleship.model.PortaAviones;
-import itson.battleship.model.Submarino;
 import itson.battleship.model.Tablero;
+import itson.battleship.red.ProxyPeer;
+import itson.battleship.view.PantallaColocacion;
 import itson.battleship.view.PantallaPrincipal;
 import java.util.Scanner;
-import itson.battleship.red.ProxyPeer;
 
 /**
  *
@@ -25,15 +20,22 @@ import itson.battleship.red.ProxyPeer;
 public class main {
 
     public static void main(String[] args) {
-        Jugador jugador1 = new Jugador("Jugador 1", ColorJugador.AZUL, armarTablero1());
-        Jugador jugador2 = new Jugador("Jugador 2", ColorJugador.ROJO, armarTablero2());
-        jugador1.confirmarTablero();
-        jugador2.confirmarTablero();
+        Jugador jugador1 = new Jugador("Jugador 1", ColorJugador.AZUL, new Tablero(10, 10));
+        Jugador jugador2 = new Jugador("Jugador 2", ColorJugador.ROJO, new Tablero(10, 10));
 
         Partida partida = new Partida("Batalla Naval", jugador1, jugador2, 30);
         ProxyPeer proxyPeer = new ProxyPeer();
         IControlador controlador = new ControladorJuego(partida, proxyPeer);
         Scanner scanner = new Scanner(System.in);
+
+        PantallaColocacion colocacion1 = new PantallaColocacion(controlador, partida, jugador1, scanner);
+        PantallaColocacion colocacion2 = new PantallaColocacion(controlador, partida, jugador2, scanner);
+        partida.agregarObservador(colocacion1);
+        partida.agregarObservador(colocacion2);
+        colocacion1.iniciar();
+        colocacion2.iniciar();
+        partida.quitarObservador(colocacion1);
+        partida.quitarObservador(colocacion2);
 
         partida.iniciar();
 
@@ -49,37 +51,5 @@ public class main {
                 pantalla2.iniciar();
             }
         }
-    }
-
-    private static Tablero armarTablero1() {
-        Tablero tablero = new Tablero(10, 10);
-        tablero.colocarNave(new PortaAviones(OrientacionNave.HORIZONTAL), new Coordenadas(0, 0));
-        tablero.colocarNave(new PortaAviones(OrientacionNave.VERTICAL), new Coordenadas(9, 0));
-        tablero.colocarNave(new Crucero(OrientacionNave.HORIZONTAL), new Coordenadas(0, 3));
-        tablero.colocarNave(new Crucero(OrientacionNave.VERTICAL), new Coordenadas(5, 3));
-        tablero.colocarNave(new Submarino(OrientacionNave.HORIZONTAL), new Coordenadas(7, 5));
-        tablero.colocarNave(new Submarino(OrientacionNave.VERTICAL), new Coordenadas(0, 6));
-        tablero.colocarNave(new Submarino(OrientacionNave.HORIZONTAL), new Coordenadas(2, 8));
-        tablero.colocarNave(new Submarino(OrientacionNave.VERTICAL), new Coordenadas(9, 8));
-        tablero.colocarNave(new Barco(OrientacionNave.HORIZONTAL), new Coordenadas(7, 2));
-        tablero.colocarNave(new Barco(OrientacionNave.HORIZONTAL), new Coordenadas(3, 5));
-        tablero.colocarNave(new Barco(OrientacionNave.HORIZONTAL), new Coordenadas(7, 9));
-        return tablero;
-    }
-
-    private static Tablero armarTablero2() {
-        Tablero tablero = new Tablero(10, 10);
-        tablero.colocarNave(new PortaAviones(OrientacionNave.VERTICAL), new Coordenadas(0, 0));
-        tablero.colocarNave(new PortaAviones(OrientacionNave.HORIZONTAL), new Coordenadas(5, 9));
-        tablero.colocarNave(new Crucero(OrientacionNave.HORIZONTAL), new Coordenadas(2, 0));
-        tablero.colocarNave(new Crucero(OrientacionNave.VERTICAL), new Coordenadas(9, 2));
-        tablero.colocarNave(new Submarino(OrientacionNave.HORIZONTAL), new Coordenadas(4, 3));
-        tablero.colocarNave(new Submarino(OrientacionNave.VERTICAL), new Coordenadas(7, 3));
-        tablero.colocarNave(new Submarino(OrientacionNave.HORIZONTAL), new Coordenadas(1, 6));
-        tablero.colocarNave(new Submarino(OrientacionNave.VERTICAL), new Coordenadas(4, 6));
-        tablero.colocarNave(new Barco(OrientacionNave.HORIZONTAL), new Coordenadas(7, 0));
-        tablero.colocarNave(new Barco(OrientacionNave.HORIZONTAL), new Coordenadas(9, 7));
-        tablero.colocarNave(new Barco(OrientacionNave.HORIZONTAL), new Coordenadas(1, 9));
-        return tablero;
     }
 }
