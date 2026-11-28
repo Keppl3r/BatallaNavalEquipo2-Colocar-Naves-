@@ -16,6 +16,6 @@ public interface IPartida {
 
     void limpiarTablero(Jugador jugador);
 
-    void confirmarTablero(Jugador jugador);
+    boolean confirmarTablero(Jugador jugador);
     
 }

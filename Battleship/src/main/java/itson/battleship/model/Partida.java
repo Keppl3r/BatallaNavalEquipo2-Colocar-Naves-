@@ -210,7 +210,7 @@ public class Partida implements IPartida, IModel, Observado {
     }
 
     @Override
-    public void confirmarTablero(Jugador jugador) {
+    public boolean confirmarTablero(Jugador jugador) {
         if (jugador.confirmarTablero()) {
             notificarObservadores();
         }
