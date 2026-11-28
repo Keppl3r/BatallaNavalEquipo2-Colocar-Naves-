@@ -11,6 +11,7 @@ import itson.battleship.red.ProxyPeer;
 import itson.battleship.view.PantallaColocacion;
 import itson.battleship.view.PantallaPrincipal;
 import java.util.Scanner;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -19,7 +20,7 @@ import java.util.Scanner;
  */
 public class main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Jugador jugador1 = new Jugador("Jugador 1", ColorJugador.AZUL, new Tablero(10, 10));
         Jugador jugador2 = new Jugador("Jugador 2", ColorJugador.ROJO, new Tablero(10, 10));
 
@@ -28,14 +29,20 @@ public class main {
         IControlador controlador = new ControladorJuego(partida, proxyPeer);
         Scanner scanner = new Scanner(System.in);
 
-        PantallaColocacion colocacion1 = new PantallaColocacion(controlador, partida, jugador1, scanner);
-        PantallaColocacion colocacion2 = new PantallaColocacion(controlador, partida, jugador2, scanner);
+        PantallaColocacion colocacion1 = new PantallaColocacion(controlador, partida, jugador1);
+        PantallaColocacion colocacion2 = new PantallaColocacion(controlador, partida, jugador2);
         partida.agregarObservador(colocacion1);
         partida.agregarObservador(colocacion2);
         colocacion1.iniciar();
         colocacion2.iniciar();
-        partida.quitarObservador(colocacion1);
-        partida.quitarObservador(colocacion2);
+
+        while (!partida.ambosConfirmaron()) {
+            Thread.sleep(500);
+        }
+        SwingUtilities.invokeAndWait(() -> {
+            partida.quitarObservador(colocacion1);
+            partida.quitarObservador(colocacion2);
+        });
 
         partida.iniciar();
 
